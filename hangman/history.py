@@ -33,13 +33,9 @@ class History:
     def get_scoreboard(self):
         """Generate a scoreboard with statistics for each player"""
         self.scoreboard = self.history.copy()
-        #win_percentage = ((self.scoreboard['Games Won']/self.scoreboard['Games Played'])*100)
         self.scoreboard['Win Percentage'] = ((self.scoreboard['Games Won']/self.scoreboard['Games Played'])*100)
-        try:
-            self.scoreboard['Win Percentage'] = self.scoreboard['Win Percentage'].round(2)
-        except:
-            pass
-        self.scoreboard['Win Percentage'] = self.scoreboard['Win Percentage'].astype(str)+'%'
+        self.scoreboard['Win Percentage'] = [f"{win_percentage:.2f}%" for win_percentage\
+                                             in self.scoreboard['Win Percentage']]
         
     def get_player_stats(self, player):
         """Get the historical stats for a particular player"""
