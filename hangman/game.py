@@ -4,6 +4,13 @@ import json
 import random
 
 class HangmanGame:
+    """
+    Class containing the Hangman game play logic.
+    
+    Attributes:
+        word_length (int or str): The length of the target word.
+        difficulty (int or str): The difficulty level of the target word.
+    """
     def __init__(self, word_length = 'Random', difficulty = 'Random'):
         self.word_length = word_length
         self.difficulty = difficulty
@@ -73,7 +80,20 @@ class HangmanGame:
             self.letters[letter.lower()].append(idx)
             
     def guess(self, guess):
-        """Verifies the guessed letter or word against the target word."""
+        """
+        Verifies the guessed letter or word against the target word.
+        
+        Decrements self.remaining guesses following an incorrect guess.
+        Adjusts self.status when either all letter has been revealed or
+        if the player runs out of guesses indicating whether or not the
+        player has won or lost the game.
+        
+        Parameters:
+            guess: The letter of word that was guessed by the player.
+            
+        Returns:
+            correct_guess (bool): Indicates whether or not the guess was correct.
+        """
         correct_guess = False
         guess = guess.description if guess.description else guess.value
         if len(guess) == 1:
