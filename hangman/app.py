@@ -214,7 +214,7 @@ class App:
                 1:['green', self.game.target_word]}
         mystery_word = widgets.HTML(f"<h1><font color={info[self.game.status][0]}>Mystery Word:\
                                     {info[self.game.status][1]}</h1>",
-                                    layout=widgets.Layout(height='auto'))
+                                    layout=widgets.Layout(width="500px"))
         remaining_guesses = widgets.HTML(f"<h2><font color='black'>Remaining Guesses:\
                                          {str(self.game.remaining_guesses)}</h2>",
                                          layout=widgets.Layout(height='auto'))
