@@ -38,9 +38,10 @@ class HangmanGame:
                         params = {'minLength':length,
                                 'maxLength':length+1,
                                 'difficulty':dif}
-                        words = requests.get('http://app.linkedin-reach.io/words',
-                                             params=params).text.split('\n')
-                        self.counts[dif][length] = len(words)
+                        response = requests.get('http://app.linkedin-reach.io/words',
+                                             params=params).text
+                        if response: 
+                            self.counts[dif][length] = len(response.split('\n'))
                 with open('counts.json','w') as f:
                     json.dump(self.counts, f)
                     
@@ -54,7 +55,9 @@ class HangmanGame:
                           'Medium':(5,8),
                           'Long':(8,11)}
             min_length, max_length = length_map[self.word_length]
-        difficulty_map = {'Easy':[1,2,3],'Medium':[4,5,6,7],'Hard':[8,9,10]}
+        difficulty_map = {'Easy':[1,2,3],
+                          'Medium':[4,5,6,7],
+                          'Hard':[8,9,10]}
         difficulty_options = difficulty_map[self.difficulty] if self.difficulty != "Random" else list(range(1,11))
         difficulty = random.choice(difficulty_options)
         return min_length, max_length, difficulty
@@ -66,8 +69,7 @@ class HangmanGame:
         """
         min_length, max_length, difficulty = self.get_word_length_and_difficulty()
         self.current_difficulty = difficulty
-        num_available = sum([self.counts[difficulty][length] for length in\
-                             range(min_length,max_length) if self.counts[difficulty][length] != 1])
+        num_available = sum([self.counts[difficulty][length] for length in range(min_length,max_length)])
         start = random.randint(0,num_available-1)
         params = {'minLength':min_length,
                   'maxLength':max_length,
@@ -75,7 +77,7 @@ class HangmanGame:
                   'start':start,
                   'count':1}
         self.target_word = requests.get('http://app.linkedin-reach.io/words',
-                             params=params).text.split('\n')[0] 
+                             params=params).text
         self.current_word_length = len(self.target_word)
         
     def build_letter_dict(self):

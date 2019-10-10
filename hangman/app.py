@@ -225,7 +225,7 @@ class App:
         """A message that is displayed after the game is finished (win/lose)."""
         text = "You Win!" if self.game.status == 1 else "You Lose"
         return widgets.HTML(f"<h1><font color='blue'> {text} </h1>",
-                               layout=widgets.Layout(height='auto'))
+                           layout=widgets.Layout(margin=self.scoreboard.layout.margin))
     
     def get_play_again(self):
         """
@@ -237,6 +237,7 @@ class App:
         play_again = widgets.Button(description="Play Again",
                                          button_style="success")
         play_again.on_click(self.reset)
+        play_again.layout.margin = self.scoreboard.layout.margin
         return play_again
         
     def get_left_sidebar(self):
@@ -291,6 +292,12 @@ class App:
                                      left_sidebar=self.left_sidebar,
                                      center=self.hangman_image,
                                      footer=self.footer)
+        if self.game.status == 0 and self.game.remaining_guesses < 6:
+            self.difficulty_setter.disabled=True
+            self.word_length_setter.disabled=True
+        else:
+            self.difficulty_setter.disabled=False
+            self.word_length_setter.disabled=False
         if hasattr(self, "guessed_words"):
             self.get_guess_list()
             self.app.right_sidebar = self.guess_list
