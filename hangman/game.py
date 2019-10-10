@@ -34,7 +34,7 @@ class HangmanGame:
             except:
                 self.counts = [[0 for _ in range(11)] for _ in range(11)]
                 for dif in range(1,11):
-                    for length in range(4, 11):
+                    for length in range(2, 11):
                         params = {'minLength':length,
                                 'maxLength':length+1,
                                 'difficulty':dif}
@@ -44,31 +44,39 @@ class HangmanGame:
                 with open('counts.json','w') as f:
                     json.dump(self.counts, f)
                     
+    def get_word_length_and_difficulty(self):
+        """Determines word length and difficulty of target word from player speifications."""
+        if self.word_length == "Random":
+            min_length = 2
+            max_length = 11
+        else:
+            length_map = {'Short':(2,5),
+                          'Medium':(5,8),
+                          'Long':(8,11)}
+            min_length, max_length = length_map[self.word_length]
+        difficulty_map = {'Easy':[1,2,3],'Medium':[4,5,6,7],'Hard':[8,9,10]}
+        difficulty_options = difficulty_map[self.difficulty] if self.difficulty != "Random" else list(range(1,11))
+        difficulty = random.choice(difficulty_options)
+        return min_length, max_length, difficulty
+                    
     def get_target_word(self):
         """
         Requests a single word from the API passing the specified difficulty
         and word length as parameters.
         """
-        if self.word_length == "Random":
-            length = random.choice(range(4,11))
-        else:
-            length = self.word_length
-        if self.difficulty == "Random":
-            difficulty = random.choice(range(1,11))
-        else:
-            difficulty = self.difficulty
-        if difficulty == 1 and length == 10:
-            difficulty = 2 # There are no words with length 10 and difficulty 1
-        self.current_word_length = length
+        min_length, max_length, difficulty = self.get_word_length_and_difficulty()
         self.current_difficulty = difficulty
-        start = random.randint(0,self.counts[difficulty][length]-1)
-        params = {'minLength':length,
-                  'maxLength':length+1,
+        num_available = sum([self.counts[difficulty][length] for length in\
+                             range(min_length,max_length) if self.counts[difficulty][length] != 1])
+        start = random.randint(0,num_available-1)
+        params = {'minLength':min_length,
+                  'maxLength':max_length,
                   'difficulty':difficulty,
                   'start':start,
                   'count':1}
         self.target_word = requests.get('http://app.linkedin-reach.io/words',
                              params=params).text.split('\n')[0] 
+        self.current_word_length = len(self.target_word)
         
     def build_letter_dict(self):
         """

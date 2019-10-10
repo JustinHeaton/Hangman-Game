@@ -138,7 +138,7 @@ class App:
     def get_word_length_setter(self):
         """Builds a dropdown widget enabling player to set the length of the target word."""
         self.word_length_setter = widgets.Dropdown(description = "Word Length",
-                                            options = list(range(4, 11))+['Random'],
+                                            options = ['Short','Medium','Long','Random'],
                                             value=self.word_length,
                                             layout=widgets.Layout(height="auto",width='180px'))
         self.word_length_setter.observe(self.set_word_length, names=['value'])
@@ -149,9 +149,9 @@ class App:
         self.reset()
         
     def get_difficulty_setter(self):
-        """Builds a dropdown widget enabling player to set the length of the target word."""
+        """Builds a dropdown widget enabling player to set the difficulty of the target word."""
         self.difficulty_setter = widgets.Dropdown(description = "Difficulty",
-                                       options = list(range(1,11))+['Random'],
+                                       options = ['Easy','Medium','Hard','Random'],
                                        value = self.difficulty,
                                        layout=widgets.Layout(height="auto",width='180px'))
         self.difficulty_setter.observe(self.set_difficulty, names=['value'])
