@@ -26,6 +26,17 @@ class History:
             self.history.loc[len(self.history)]=[user, 1, int(score>0), score]
         self.get_scoreboard()
         self.history.to_json('history.json')
+        
+    def log_game(self, player, score, target_word, difficulty):
+        """
+        Log the results of each completed game. 
+        
+        Can be used to analyze statistics and possibly rescore the difficulty
+        levels of the words based on player win percentages.
+        """
+        log = f"{player} {target_word} {int(score>0)} {difficulty}\n"
+        with open('logs.txt', 'a+') as f:
+            f.write(log)
     
     def display_table(self):
         display(self.history)
