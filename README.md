@@ -11,3 +11,8 @@ jupyter notebook Hangman.ipynb
 ```
 This should open the notebook in a browser window, and further instructions for playing the game can be found inside the notebook.
 
+## Instructions:
+After opening the notebook `Hangman.ipynb`, run the first code cell and the game will appear. 
+
+Gameplay instructions can be seen in the following gif:
+![instructions](assets/instructions.gif)
